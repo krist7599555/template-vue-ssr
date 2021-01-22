@@ -18,16 +18,19 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang='pcss' scoped>
 nav {
   height: 5rem;
   padding: 1rem;
   background-color: aquamarine;
 }
 a {
-  @apply px-4 py-2;
+  color: green;
+  @apply rounded-2xl rounded-r-none;
   @apply rounded;
   @apply border;
   @apply bg-white;
+  @apply px-4;
+  @apply py-2;
 }
 </style>

@@ -9,3 +9,6 @@ body {
 // @import "tailwindcss/base";
 // @import "tailwindcss/components";
 // @import "tailwindcss/utilities";
+span {
+  @apply rounded-2xl rounded-r-none;
+}

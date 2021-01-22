@@ -2,7 +2,7 @@
   <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab error perspiciatis hic. Provident optio adipisci fugit nobis earum magnam labore voluptatem ad fugiat. Itaque, in fuga ipsa cumque error soluta?</div>
   <button>
   <div class="center">hi</div>
-  <div :class="{center: true, active: true}">hi2</div>
+  <button :class="{center: true, active: true}">hi2</button>
   </button>
    <teleport to="head">
     <title>Home</title>
@@ -28,7 +28,7 @@ button {
   }
   &.active {
     background-color: burlywood;
-    color: red;
+    color: rgb(112, 53, 53);
   }
 }
 </style>
