@@ -1,7 +1,6 @@
 const path = require('path')
-
+const rollup = require('rollup')
 const copy = require('rollup-plugin-copy')
-const run = require('@rollup/plugin-run')
 const vue = require('rollup-plugin-vue');
 const postcss = require('rollup-plugin-postcss')
 const replace = require('@rollup/plugin-replace')
@@ -12,6 +11,8 @@ const auto_external = require('rollup-plugin-auto-external');
 
 const dev = !!process.env.ROLLUP_WATCH;
 const prod = !dev;
+
+/* ------------------------------- SSR CONFIG ------------------------------- */
 
 /** @type {import('rollup').RollupOptions} */
 const build_ssr = {
@@ -25,18 +26,16 @@ const build_ssr = {
     vue({ target: 'node', preprocessStyles: false }),
     typescript({}),
     postcss({
+      extract: true,
       config: {
         path: path.join(__dirname, 'postcss.config.js'),
         ctx: { prod }
       }
     }),
-    dev && run({
-      options: {
-        detached: true
-      }
-    })
   ],
 };
+
+/* ------------------------------- SPA CONFIG ------------------------------- */
 
 /** @type {import('rollup').RollupOptions} */
 const build_spa = {
@@ -77,4 +76,21 @@ const build_spa = {
   ],
 }
 
-export default [build_ssr, build_spa];
+/* ---------------------- APP CONFIG (CLIENT + SERVER) ---------------------- */
+
+const rollup_config = [build_ssr, build_spa];
+export default rollup_config
+
+/* ------------------------------- HOT RELOAD ------------------------------- */
+
+const watcher = rollup.watch([build_ssr, build_spa])
+const child_process = require('child_process')
+
+watcher.on('event', event => {
+  if (event.code === 'END') {
+    child_process.execSync('yarn kill-port 3000')
+    const p = child_process.exec("node ./dist/server.js")
+    p.stdout.pipe(process.stdout)
+    p.stderr.pipe(process.stderr)
+  }
+});
