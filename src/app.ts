@@ -1,7 +1,6 @@
 import { createApp, createSSRApp } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
 
-import "./style.scss"
 import App from './App.vue';
 import Home from './pages/Home.vue';
 import { renderToString, SSRContext } from '@vue/server-renderer';

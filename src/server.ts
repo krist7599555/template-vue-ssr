@@ -6,6 +6,7 @@ import { renderToString, SSRContext } from "@vue/server-renderer";
 import * as fs from 'fs'
 import * as path from 'path'
 
+const public_dir = path.join(__dirname, 'bundle');
 const index_html_template = fs.readFileSync(path.resolve(__dirname, './index.html')).toString('utf-8')
 
 
@@ -39,19 +40,22 @@ export async function create_vue_instance_ssr({ path = '/', ...context } = {} as
 import Koa from 'koa'
 import cors from '@koa/cors'
 import send from 'koa-send'
+import logger from 'koa-logger'
 import { PORT, HOST } from 'src/config';
 
 const app =  new Koa();
 
 app.use(cors());
-app.use(require('koa-logger')())
+app.use(logger());
 app.use(async (ctx, next) => {
   try {
-    const file_local_path = await send(ctx, ctx.path, { root: path.join(__dirname, 'public') });
+    const file_local_path = await send(ctx, ctx.path, { root: public_dir });
     if (!file_local_path) {
+      console.log(['null', file_local_path], ctx.path)
       await next();
     }
   } catch(err) {
+    console.log(['err', err], ctx.path)
     await next();
   }
 })

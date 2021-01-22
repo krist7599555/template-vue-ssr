@@ -1,5 +1,13 @@
 {
   "search.exclude": {
     "**/node_modules": false
-  }
+  },
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "tailwindCSS.colorDecorators": "on",
+  "tailwindCSS.emmetCompletions": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "scss.lint.unknownAtRules": "ignore",
+  "scss.completion.completePropertyWithSemicolon": false,
 }
