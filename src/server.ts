@@ -41,27 +41,19 @@ import Koa from 'koa'
 import cors from '@koa/cors'
 import send from 'koa-send'
 import logger from 'koa-logger'
-import { PORT, HOST } from 'src/config';
+import { PORT, HOST } from './config';
 
 const app =  new Koa();
 
 app.use(cors());
 app.use(logger());
-app.use(async (ctx, next) => {
-  try {
-    const file_local_path = await send(ctx, ctx.path, { root: public_dir });
-    if (!file_local_path) {
-      console.log(['null', file_local_path], ctx.path)
-      await next();
-    }
-  } catch(err) {
-    console.log(['err', err], ctx.path)
-    await next();
+app.use(async (ctx) => {
+  const file_exist = await send(ctx, ctx.path, { root: public_dir }).catch(() => null)
+  if (!file_exist) {
+    ctx.body = (await create_vue_instance_ssr({ path: ctx.path })).template;
   }
-})
-app.use(async ctx => {
-  ctx.body = (await create_vue_instance_ssr({ path: ctx.path })).template;
-})
+});
+
 app.listen(PORT, () => {
   console.log(`listen http://${HOST}:${PORT}`)
 })
